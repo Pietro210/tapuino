@@ -70,7 +70,12 @@ void display_filename(FILINFO* pfile_info) {
 }
 
 void lcd_spinner_internal(uint32_t cur_tick, uint8_t perc, uint16_t rate) {
-  static uint8_t indicators[] = {'|', '/', '-', '\\'};
+  #ifdef LCD_HD44780_EURO
+    static uint8_t indicators[] = {0b00101110, 0b10100101, 0b00101110, 0b10100101}; // bouncing dot
+  #else
+    static uint8_t indicators[] = {'|', '/', '-', '\\'};
+  #endif
+
   static uint8_t pos = 0;
   if (cur_tick - g_last_tick < rate) {
     return;

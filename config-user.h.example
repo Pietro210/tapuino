@@ -23,6 +23,13 @@
 // #define LCD_USE_SSD131X_OLED_MODULE
 // #define LCD_I2C_ADDR        0x3C // I2C address for the OLED
 
+// #define LCD_USE_LIQUIDCRYSTAL
+// #define LCD_I2C_ADDR 0x00 // unused
+
+
+// uncomment if your HD44780 LCD uses the european character set
+// #define LCD_HD44780_EURO
+
 /********************************************************************************/
 // Language Definitions
 /********************************************************************************/

@@ -5,7 +5,7 @@
 #include "config-user.h"
 
 // thanks stack overflow: http://stackoverflow.com/questions/4301471/c-macro-to-test-if-more-than-one-defined
-#if defined(LCD_USE_SSD1306_OLED_MODULE) + defined(LCD_USE_1602_LCD_MODULE) + defined(LCD_USE_SSD131X_OLED_MODULE) != 1
+#if defined(LCD_USE_SSD1306_OLED_MODULE) + defined(LCD_USE_1602_LCD_MODULE) + defined(LCD_USE_SSD131X_OLED_MODULE) + defined(LCD_USE_LIQUIDCRYSTAL) != 1
   #error Ether no or multiple LCD types defined! Have you created your config-user.h file?
 #endif
 
@@ -28,6 +28,13 @@
 #define LCD_BIT_DATA1       5    // 4 bit data, bit 1
 #define LCD_BIT_DATA2       6    // 4 bit data, bit 2
 #define LCD_BIT_DATA3       7    // 4 bit data, bit 3
+// LCD pins for HD44780 chipset without i2c interface
+#define LCD_PIN_RS          4
+#define LCD_PIN_ENABLE      5
+#define LCD_PIN_DATA4       6
+#define LCD_PIN_DATA5       7
+#define LCD_PIN_DATA6       0    // we can't use pin 8 because it's ICP1 and is reserved for timer1 capture events...
+#define LCD_PIN_DATA7       9
 // LCD dimensions config
 #define LCD_NUM_LINES       2    // number of display lines on the LCD
 #define MAX_LCD_LINE_LEN    16   // max number of characters on a line
