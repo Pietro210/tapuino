@@ -61,6 +61,8 @@ struct TAP_INFO {
 
 static struct TAP_INFO g_tap_info;
 
+#define OCR1A_DIVISOR (16000000L / F_CPU)
+
 // the maximum TAP delay is a 24-bit value i.e. 0xFFFFFF cycles
 // we need this constant to determine if the loader has switched off the motor before the tap has completed
 // which would cause the code to enter an endless loop (when the motor is off the buffers do not progress)
@@ -145,7 +147,7 @@ ISR(TIMER1_CAPT_vect) {
   if(g_signal_2nd_half) {                             // finished measuring 
     g_pulse_length = ICR1;                            // pulse length = ICR1 i.e. timer count
     g_pulse_length += (g_overflow << 16);             // add overflows
-    g_pulse_length >>= 4;                             // turn raw tick values at 1/16th us into 1us i.e. divide by 16
+    g_pulse_length /= (F_CPU / 1000000L);             // turn raw tick values into microseconds
     // start counting here
     g_overflow = 0;
     TCNT1 = 0;
@@ -188,7 +190,7 @@ ISR(TIMER1_COMPA_vect) {
   uint32_t tap_data;
 
   // keep track of the number of cycles in case we get to a MOTOR stop situation before the TAP has completed
-  g_total_timer_count += OCR1A;
+  g_total_timer_count += OCR1A / OCR1A_DIVISOR;
   
   // don't process if the MOTOR is off!
   if (MOTOR_IS_OFF() || g_is_paused) {
@@ -200,7 +202,7 @@ ISR(TIMER1_COMPA_vect) {
       g_pulse_length -= 0xFFFF;
       OCR1A = 0xFFFF;
     } else {
-      OCR1A = (unsigned short) g_pulse_length;
+      OCR1A = (unsigned short) (g_pulse_length / OCR1A_DIVISOR);
       g_pulse_length = 0;                 // clear this, for 1st half check so that the next data is loaded
       g_signal_2nd_half = 0;              // next time round switch to 1st half
     }
@@ -215,7 +217,7 @@ ISR(TIMER1_COMPA_vect) {
         g_pulse_length -= 0xFFFF;
         OCR1A = 0xFFFF;
       } else {
-        OCR1A = (unsigned short) g_pulse_length;
+        OCR1A = (unsigned short) (g_pulse_length / OCR1A_DIVISOR);
         g_pulse_length = g_pulse_length_save; // restore pulse length for the 2nd half of the signal
         g_signal_2nd_half = 1;            // next time round switch to 2nd half
       }
@@ -268,7 +270,7 @@ ISR(TIMER1_COMPA_vect) {
         g_pulse_length -= 0xFFFF;
         OCR1A = 0xFFFF;
       } else {
-        OCR1A = (unsigned short) g_pulse_length;
+        OCR1A = (unsigned short) (g_pulse_length / OCR1A_DIVISOR);
         g_pulse_length = g_pulse_length_save; // restore pulse length for the 2nd half of the signal
         g_signal_2nd_half = 1;            // next time round switch to 2nd half
       }
