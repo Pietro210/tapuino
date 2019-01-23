@@ -54,13 +54,13 @@
 // port definitions, change for different wiring
 #define SENSE_PORT          PORTD
 #define SENSE_DDR           DDRD
-#define SENSE_PIN           5
+#define SENSE_PIN           3
 #define SENSE_ON()          SENSE_PORT &= ~_BV(SENSE_PIN)
 #define SENSE_OFF()         SENSE_PORT |=  _BV(SENSE_PIN)
 
 #define TAPE_READ_PORT      PORTD
 #define TAPE_READ_DDR       DDRD
-#define TAPE_READ_PIN       3
+#define TAPE_READ_PIN       1
 #define TAPE_READ_PINS      PIND
 #define TAPE_READ_LOW()     TAPE_READ_PORT &= ~_BV(TAPE_READ_PIN)
 #define TAPE_READ_HIGH()    TAPE_READ_PORT |=  _BV(TAPE_READ_PIN)
@@ -68,18 +68,18 @@
 #define TAPE_WRITE_PORT     PORTB
 #define TAPE_WRITE_DDR      DDRB
 #define TAPE_WRITE_PINS     PINB
-#define TAPE_WRITE_PIN      0
+#define TAPE_WRITE_PIN      0 // pin D8
 
 #define MOTOR_PORT          PORTD
 #define MOTOR_DDR           DDRD
-#define MOTOR_PIN           4
+#define MOTOR_PIN           2
 #define MOTOR_PINS          PIND
 #define MOTOR_IS_OFF()      (MOTOR_PINS & _BV(MOTOR_PIN))
 
 #define CONTROL_PORT        PORTD
 #define CONTROL_DDR         DDRD
-#define CONTROL_PIN0        6
-#define CONTROL_PIN1        7
+#define CONTROL_PIN0        -1
+#define CONTROL_PIN1        -1
 #ifdef USE_CONTROL_BUS
   #define CONTROL_SET_BUS0() CONTROL_PORT &= ~(_BV(CONTROL_PIN0) | _BV(CONTROL_PIN1))
   #define CONTROL_SET_BUS1() { CONTROL_PORT &= ~_BV(CONTROL_PIN1); CONTROL_PORT |= _BV(CONTROL_PIN0); }
@@ -90,7 +90,7 @@
 
 #define REC_LED_PORT        PORTD
 #define REC_LED_DDR         DDRD
-#define REC_LED_PIN         2
+#define REC_LED_PIN         -1
 #ifdef USE_REC_LED
   #define REC_LED_OFF()     REC_LED_PORT |= _BV(REC_LED_PIN)
   #define REC_LED_ON()      REC_LED_PORT &= ~_BV(REC_LED_PIN)
