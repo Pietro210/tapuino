@@ -80,14 +80,24 @@
 #define CONTROL_DDR         DDRD
 #define CONTROL_PIN0        6
 #define CONTROL_PIN1        7
-#define CONTROL_SET_BUS0()  CONTROL_PORT &= ~(_BV(CONTROL_PIN0) | _BV(CONTROL_PIN1))
-#define CONTROL_SET_BUS1()  { CONTROL_PORT &= ~_BV(CONTROL_PIN1); CONTROL_PORT |= _BV(CONTROL_PIN0); }
+#ifdef USE_CONTROL_BUS
+  #define CONTROL_SET_BUS0() CONTROL_PORT &= ~(_BV(CONTROL_PIN0) | _BV(CONTROL_PIN1))
+  #define CONTROL_SET_BUS1() { CONTROL_PORT &= ~_BV(CONTROL_PIN1); CONTROL_PORT |= _BV(CONTROL_PIN0); }
+#else
+  #define CONTROL_SET_BUS0() // noop
+  #define CONTROL_SET_BUS1() // noop
+#endif
 
 #define REC_LED_PORT        PORTD
 #define REC_LED_DDR         DDRD
 #define REC_LED_PIN         2
-#define REC_LED_OFF()       REC_LED_PORT |= _BV(REC_LED_PIN)
-#define REC_LED_ON()        REC_LED_PORT &= ~_BV(REC_LED_PIN)
+#ifdef USE_REC_LED
+  #define REC_LED_OFF()     REC_LED_PORT |= _BV(REC_LED_PIN)
+  #define REC_LED_ON()      REC_LED_PORT &= ~_BV(REC_LED_PIN)
+#else
+  #define REC_LED_OFF()     // noop
+  #define REC_LED_ON()      // noop
+#endif
 
  // comment this line if you are using HW1.0
 #define KEYS_INPUT_PULLUP

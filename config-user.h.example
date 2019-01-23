@@ -41,3 +41,10 @@
 // #define TAPUINO_LANGUAGE_TR
 // #define TAPUINO_LANGUAGE_ES
 // #define TAPUINO_LANGUAGE_DE
+
+/********************************************************************************/
+// Extra Features Definitions
+/********************************************************************************/
+
+// #define USE_REC_LED
+// #define USE_CONTROL_BUS

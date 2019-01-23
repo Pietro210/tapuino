@@ -664,9 +664,11 @@ int tapuino_hardware_setup(void)
   
   load_eeprom_data();
   
-  // enable TWI pullups
-  TWI_PORT |= _BV(TWI_PIN_SDA);
-  TWI_PORT |= _BV(TWI_PIN_SCL);
+  #if defined(LCD_USE_SSD1306_OLED_MODULE) + defined(LCD_USE_1602_LCD_MODULE) + defined(LCD_USE_SSD131X_OLED_MODULE) > 0
+    // enable TWI pullups
+    TWI_PORT |= _BV(TWI_PIN_SDA);
+    TWI_PORT |= _BV(TWI_PIN_SCL);
+  #endif
     
   // sense is output to C64
   SENSE_DDR |= _BV(SENSE_PIN);
@@ -687,12 +689,16 @@ int tapuino_hardware_setup(void)
   MOTOR_PORT |= _BV(MOTOR_PIN);
   
   // Control pins are output
-  CONTROL_DDR |= _BV(CONTROL_PIN0) | _BV(CONTROL_PIN1);
+  #ifdef USE_CONTROL_BUS
+    CONTROL_DDR |= _BV(CONTROL_PIN0) | _BV(CONTROL_PIN1);
+  #endif
   // default both LOW so BUS 0
   CONTROL_SET_BUS0();
   
   // recording led (Arduino: D2, Atmel: PD2)
-  REC_LED_DDR |= _BV(REC_LED_PIN);
+  #ifdef USE_REC_LED
+    REC_LED_DDR |= _BV(REC_LED_PIN);
+  #endif
   REC_LED_OFF();
   
   // keys are all inputs, activate pullups
